@@ -170,9 +170,16 @@ void MainWindow::on_pushButton_2_clicked()
 
 }
 
-void MainWindow::setWIN32Time(const QDateTime& qdt)
+void MainWindow::setWIN32Time(const QDateTime& dt)
 {
-    QMessageBox::information(NULL, "即将校正......", qdt.toString("yyyy-MM-dd hh:mm:ss dddd"), QMessageBox::Yes, QMessageBox::Yes);
+
+
+
+    //QMessageBox::information(NULL, "即将校正......", dt.toString("yyyy-MM-dd hh:mm:ss dddd"), QMessageBox::Yes, QMessageBox::Yes);
+
+
+    //因为win函数使用北京的时区自动+8了
+    QDateTime qdt = dt.addSecs(-8*60*60);
 
     QDate dpart = qdt.date();
     QTime tpart = qdt.time();
@@ -182,7 +189,7 @@ void MainWindow::setWIN32Time(const QDateTime& qdt)
     stNew.wYear         = dpart.year();qDebug()<<stNew.wYear<<endl;
     stNew.wMonth        = dpart.month() ;qDebug()<<stNew.wMonth<<endl;
     stNew.wDay          = dpart.day() ;qDebug()<<stNew.wDay<<endl;
-    stNew.wHour         = tpart.hour() - 8 ;qDebug()<<stNew.wHour<<endl;//因为win函数使用北京的时区自动+8了
+    stNew.wHour         = tpart.hour();qDebug()<<stNew.wHour<<endl;
     stNew.wMinute       = tpart.minute();qDebug()<<stNew.wMinute <<endl;
     stNew.wSecond       = tpart.second() ;qDebug()<<stNew.wSecond<<endl;
     stNew.wMilliseconds = 0 ;qDebug()<<stNew.wMilliseconds<<endl;
