@@ -20,7 +20,7 @@
    <bool>false</bool>
   </property>
   <property name="windowTitle">
-   <string>ET外星人自动校时</string>
+   <string>灯火阑珊自动校时</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="pushButton">
@@ -101,17 +101,17 @@
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>0</x>
       <y>0</y>
-      <width>251</width>
-      <height>141</height>
+      <width>611</width>
+      <height>101</height>
      </rect>
     </property>
     <property name="text">
      <string/>
     </property>
     <property name="pixmap">
-     <pixmap resource="nt.qrc">:/resource/pic.jpg</pixmap>
+     <pixmap resource="nt.qrc">:/resource/lightfire.jpg</pixmap>
     </property>
     <property name="scaledContents">
      <bool>true</bool>
@@ -258,44 +258,6 @@
     </property>
     <property name="text">
      <string>本机时间</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>181</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap resource="nt.qrc">:/resource/boy.jpg</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_7">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>0</y>
-      <width>181</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap resource="nt.qrc">:/resource/girl.jpg</pixmap>
-    </property>
-    <property name="scaledContents">
-     <bool>true</bool>
     </property>
    </widget>
   </widget>

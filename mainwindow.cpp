@@ -211,11 +211,12 @@ void MainWindow::on_pushButton_3_clicked()
         QStringList servers = settings->value("server").toStringList();
         servers.append(addserver);
         settings->setValue("server",servers);
-    }
+
     //更新combo
     ui->comboBox->addItem(addserver);
 
     ui->lineEdit->clear();
+    }
 }
 
 void MainWindow::updateComboBox()

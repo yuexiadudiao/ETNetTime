@@ -1,8 +1,6 @@
 <RCC>
     <qresource prefix="/image"/>
     <qresource prefix="/">
-        <file>resource/pic.jpg</file>
-        <file>resource/girl.jpg</file>
-        <file>resource/boy.jpg</file>
+        <file>resource/lightfire.jpg</file>
     </qresource>
 </RCC>
