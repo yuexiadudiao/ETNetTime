@@ -19,21 +19,23 @@ public:
     ~MainWindow();  
 
 private slots:
+    //button回调函数
     void on_pushButton_clicked();
+    void on_pushButton_2_clicked();
+    void on_pushButton_3_clicked();
+    void on_pushButton_4_clicked();
+
     void readingDataGrams();
     void connectsucess();
     void timerUpdate();
     void nettimerUpdate();
     void quirytimeout();
-    void on_pushButton_2_clicked();
-
-    void on_pushButton_3_clicked();
-
-    void on_pushButton_4_clicked();
 
 private:
     void updateComboBox();
-    void setWIN32Time(const QDateTime& qdt);
+    #if defined(Q_OS_WIN32)
+        void setWIN32Time(const QDateTime& qdt);
+    #endif
     Ui::MainWindow *ui;
     QUdpSocket *udpsocket;
     QTimer *timer;

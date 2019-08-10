@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //设置默认NTP服务器
     auto_servers.append(QString("ntp1.aliyun.com"));
 
-    //创建绑定启动定时器,这个定时器一直都在运行
+    //采用定时器，每秒更新一次localtime和nettime文本框
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(timerUpdate()));
     connect(timer,SIGNAL(timeout()),this,SLOT(nettimerUpdate()));
@@ -37,13 +37,8 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::timerUpdate()
-{
-    QDateTime time = QDateTime::currentDateTime();
-    QString str = time.toString("yyyy-MM-dd hh:mm:ss dddd");
-    ui->lineEdit_3->setText(str);
-}
 
+/* 连接校时服务器 */
 void MainWindow::connectsucess()
 {
     qint8 LI=0;
@@ -82,7 +77,7 @@ void MainWindow::connectsucess()
    QTimer::singleShot(1*1000,this,SLOT(quirytimeout()));
    // ui->pushButton->setEnabled(false);
 }
-
+/* 读取校时服务器时间 */
 void MainWindow::readingDataGrams()
 {
     QByteArray newTime;
@@ -112,6 +107,14 @@ void MainWindow::readingDataGrams()
 
 }
 
+/* localtime文本框回调 */
+void MainWindow::timerUpdate()
+{
+    QDateTime time = QDateTime::currentDateTime();
+    QString str = time.toString("yyyy-MM-dd hh:mm:ss dddd");
+    ui->lineEdit_3->setText(str);
+}
+/* nettime文本框回调 */
 void MainWindow::nettimerUpdate()
 {
     QString timestr = ui->lineEdit_2->text();
@@ -121,8 +124,7 @@ void MainWindow::nettimerUpdate()
         ui->lineEdit_2->setText(newnettime.addMSecs(1000).toString("yyyy-MM-dd hh:mm:ss dddd"));
     }
 }
-
-/* “查询”被点击 */
+/* “查询”按钮回调 */
 void MainWindow::on_pushButton_clicked()
 {
     if(ui->comboBox->count() == 0)//下拉列表为空
@@ -145,11 +147,9 @@ void MainWindow::on_pushButton_clicked()
         connect(udpsocket,SIGNAL(readyRead()),this,SLOT(readingDataGrams()));
         udpsocket->connectToHost("time.windows.com",123);
 }
-
+/* “校准”按钮回调 */
 void MainWindow::on_pushButton_2_clicked()
 {
-
-
     //验证nettime的合法性【？】
     QString timestr = ui->lineEdit_2->text();
 
@@ -167,17 +167,59 @@ void MainWindow::on_pushButton_2_clicked()
         setWIN32Time(nettime);
     #endif
 
-
 }
+/* “添加”按钮回调 */
+void MainWindow::on_pushButton_3_clicked()
+{
+    //修改配置
+    QString addserver = ui->lineEdit->text();
+    if(!addserver.isEmpty())
+    {
+        QStringList servers = settings->value("server").toStringList();
+        servers.append(addserver);
+        settings->setValue("server",servers);
 
-void MainWindow::setWIN32Time(const QDateTime& dt)
+    //更新combo
+    ui->comboBox->addItem(addserver);
+
+    ui->lineEdit->clear();
+    }
+}
+/* “移除”按钮回调 */
+void MainWindow::on_pushButton_4_clicked()
+{
+    int index = ui->comboBox->currentIndex();
+    if(ui->comboBox->count())//列表中有数据
+    {
+        ui->comboBox->removeItem(index);
+
+        QStringList servers = settings->value("server").toStringList();
+        servers.removeAt(index);
+        settings->setValue("server",servers);
+
+        if(ui->comboBox->count() == 0)//说明是最后一个数据
+            settings->remove("server");
+    }
+}
+/* 下拉框显示回调 */
+void MainWindow::updateComboBox()
 {
 
+    if(!settings->contains("server"))//没有
+        settings->setValue("server",auto_servers);
+    ui->comboBox->addItems( settings->value("server").toStringList() );
+}
 
-
+/* 最长查询等待时间到了 */
+void MainWindow::quirytimeout()
+{
+    ui->lineEdit_2->setEnabled(true);
+}
+/* win平台校准时间 */
+#if defined(Q_OS_WIN32)
+void MainWindow::setWIN32Time(const QDateTime& dt)
+{
     //QMessageBox::information(NULL, "即将校正......", dt.toString("yyyy-MM-dd hh:mm:ss dddd"), QMessageBox::Yes, QMessageBox::Yes);
-
-
     //因为win函数使用北京的时区自动+8了
     QDateTime qdt = dt.addSecs(-8*60*60);
 
@@ -200,52 +242,5 @@ void MainWindow::setWIN32Time(const QDateTime& dt)
     else
         qDebug()<<"Error code:"<<GetLastError() ;
 }
-
-/*增加按钮被点击*/
-void MainWindow::on_pushButton_3_clicked()
-{
-    //修改配置
-    QString addserver = ui->lineEdit->text();
-    if(!addserver.isEmpty())
-    {
-        QStringList servers = settings->value("server").toStringList();
-        servers.append(addserver);
-        settings->setValue("server",servers);
-
-    //更新combo
-    ui->comboBox->addItem(addserver);
-
-    ui->lineEdit->clear();
-    }
-}
-
-void MainWindow::updateComboBox()
-{
-
-    if(!settings->contains("server"))//没有
-        settings->setValue("server",auto_servers);
-    ui->comboBox->addItems( settings->value("server").toStringList() );
-}
-
-/*删除按钮被点击*/
-void MainWindow::on_pushButton_4_clicked()
-{
-    int index = ui->comboBox->currentIndex();
-    if(ui->comboBox->count())//列表中有数据
-    {
-        ui->comboBox->removeItem(index);
-
-        QStringList servers = settings->value("server").toStringList();
-        servers.removeAt(index);
-        settings->setValue("server",servers);
-
-        if(ui->comboBox->count() == 0)//说明是最后一个数据
-            settings->remove("server");
-    }
-}
-
-/* 最长查询等待时间到了 */
-void MainWindow::quirytimeout()
-{
-    ui->lineEdit_2->setEnabled(true);
-}
+#endif
+/* mac平台校准时间 */
