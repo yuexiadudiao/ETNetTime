@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>611</width>
-    <height>550</height>
+    <height>388</height>
    </rect>
   </property>
   <property name="mouseTracking">
@@ -143,19 +143,6 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>340</y>
-      <width>115</width>
-      <height>19</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>开机启动</string>
-    </property>
-   </widget>
    <widget class="QRadioButton" name="radioButton_2">
     <property name="geometry">
      <rect>
@@ -250,8 +237,8 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>280</y>
+      <x>110</x>
+      <y>290</y>
       <width>99</width>
       <height>41</height>
      </rect>
