@@ -243,4 +243,4 @@ void MainWindow::setWIN32Time(const QDateTime& dt)
         qDebug()<<"Error code:"<<GetLastError() ;
 }
 #endif
-/* mac平台校准时间 */
+
